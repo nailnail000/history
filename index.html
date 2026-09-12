@@ -478,10 +478,9 @@ body:before{
 
     node.addEventListener("click",e=>{
       e.stopPropagation();
-      document.getElementById("modalTitle").textContent=node.dataset.title;
-      document.getElementById("modalSubtitle").textContent=node.dataset.subtitle;
-      document.getElementById("modalText").textContent=node.dataset.text;
-      document.getElementById("modalUnlock").textContent=node.dataset.unlock;
+      const isLocked = node.classList.contains("locked");
+
+      document.getElementById("modalTitle").textContent = node.dataset.title;
 
       const img=document.getElementById("modalImage");
       const type=node.dataset.image;
@@ -494,6 +493,18 @@ body:before{
       }else{
         img.style.background="radial-gradient(circle at 62% 38%,#69e6d0,transparent 15%),linear-gradient(120deg,#102f39,#194e5a 45%,#071523)";
       }
+
+      if (isLocked) {
+        // 미해금 노드일 경우: 스토리 대신 해금 조건 안내 표시
+        document.getElementById("modalSubtitle").textContent = "🔒 잠긴 기록";
+        document.getElementById("modalText").textContent = "이 기록은 아직 해금되지 않았습니다.\n아래의 해금 조건을 만족해 주세요.";
+      } else {
+        // 해금된 노드일 경우: 정상적으로 스토리 표시
+        document.getElementById("modalSubtitle").textContent = node.dataset.subtitle;
+        document.getElementById("modalText").textContent = node.dataset.text;
+      }
+
+      document.getElementById("modalUnlock").textContent = node.dataset.unlock;
       modal.classList.add("open");
       hideTooltip();
     });
